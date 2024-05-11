@@ -59,4 +59,31 @@ authRouter.post('/api/signin',async (req,res)=>{
     }
 })
 
+authRouter.post('/tokenIsVaild',async (req,res)=>{
+    try{
+       const token = req.header("x-auth-token");
+       if(!token){
+         return res.status(400).json({msg : "Error In Token"});
+       }
+       const verified = jwt.verify(token,"PasswordKey");
+       if(!verified){
+         return res.status(400).json({msg : "Error In Verified"});
+       }
+       const user = await User.findById(verified.id);
+       if(!user) return res.status(400).json({msg : "Error In User"});
+       res.json(true);
+    }catch(e){
+       res.status(500).json({error : "Invalid Token"})
+    }
+ });
+ 
+ 
+ // get User 
+ 
+ authRouter.get('/',auth,async (req,res)=>{
+    const user = await User.findById(req.user);
+    res.json({...user._doc,token : req.user});
+ });
+ 
+
 module.exports = authRouter;
