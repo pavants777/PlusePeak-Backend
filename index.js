@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const authRouter = require('./routes/auth');
 
-
-
-
 const Port = process.env.PORT || 2000;  // Port variable 
 const app = express();                 // install epress 
 
